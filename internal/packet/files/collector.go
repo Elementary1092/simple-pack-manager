@@ -28,7 +28,7 @@ type finderInput struct {
 }
 
 // CollectLocalFileNames ignores symbolic and hard links
-func CollectLocalFileNames(targets []*parser.Targets) (string, []string, error) {
+func CollectLocalFileNames(targets []parser.Targets) (string, []string, error) {
 	if len(targets) == 0 {
 		return "", nil, ErrNoTargets
 	}

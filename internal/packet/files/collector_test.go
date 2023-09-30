@@ -15,7 +15,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestCollectLocalFileNames_WithEmptyTargets(t *testing.T) {
-    if _, _, err := CollectLocalFileNames([]*parser.Targets{}); !errors.Is(err, ErrNoTargets) {
+    if _, _, err := CollectLocalFileNames([]parser.Targets{}); !errors.Is(err, ErrNoTargets) {
         t.Fatal(err)
     }
 }
@@ -24,7 +24,7 @@ func TestCollectLocalFileNames_WithAbsoluteFilePathAndNoExclude(t *testing.T) {
     tmp := t.TempDir()
 
     fileName := filepath.Join(tmp, "file")
-    target := &parser.Targets{
+    target := parser.Targets{
         Path: fileName,
     }
     
@@ -32,7 +32,7 @@ func TestCollectLocalFileNames_WithAbsoluteFilePathAndNoExclude(t *testing.T) {
         t.Fatal("Failed to create test file:", err)
     }
 
-    commonRoot, fileNames, err := CollectLocalFileNames([]*parser.Targets{target})
+    commonRoot, fileNames, err := CollectLocalFileNames([]parser.Targets{target})
     if err != nil {
         t.Fatal("Failed to collect files:", err)
     }
@@ -62,7 +62,7 @@ func TestCollectLocalFileNames_WithRelativePathAndNoExclude(t *testing.T) {
     defer os.Chdir(currDir)
 
     fileName := filepath.Join(".", "file")
-    target := &parser.Targets{
+    target := parser.Targets{
         Path: fileName,
     }
     
@@ -70,7 +70,7 @@ func TestCollectLocalFileNames_WithRelativePathAndNoExclude(t *testing.T) {
         t.Fatal("Failed to create test file:", err)
     }
 
-    commonRoot, fileNames, err := CollectLocalFileNames([]*parser.Targets{target})
+    commonRoot, fileNames, err := CollectLocalFileNames([]parser.Targets{target})
     if err != nil {
         t.Fatal("Failed to collect files:", err)
     }
@@ -93,7 +93,7 @@ func TestCollectLocalFileNames_WithAbsoluteFilePathAndWithExclude(t *testing.T) 
     tmp := t.TempDir()
 
     fileName := filepath.Join(tmp, "file")
-    target := &parser.Targets{
+    target := parser.Targets{
         Path: fileName,
         Exclude: "file",
     }
@@ -102,7 +102,7 @@ func TestCollectLocalFileNames_WithAbsoluteFilePathAndWithExclude(t *testing.T) 
         t.Fatal("Failed to create test file:", err)
     }
 
-    commonRoot, fileNames, err := CollectLocalFileNames([]*parser.Targets{target})
+    commonRoot, fileNames, err := CollectLocalFileNames([]parser.Targets{target})
     if err != nil {
         t.Fatal("Failed to collect files:", err)
     }
@@ -128,7 +128,7 @@ func TestCollectLocalFileNames_WithRelativePathAndWithExclude(t *testing.T) {
     defer os.Chdir(currDir)
 
     fileName := filepath.Join(".", "file")
-    target := &parser.Targets{
+    target := parser.Targets{
         Path: fileName,
         Exclude: "file",
     }
@@ -137,7 +137,7 @@ func TestCollectLocalFileNames_WithRelativePathAndWithExclude(t *testing.T) {
         t.Fatal("Failed to create test file:", err)
     }
 
-    commonRoot, fileNames, err := CollectLocalFileNames([]*parser.Targets{target})
+    commonRoot, fileNames, err := CollectLocalFileNames([]parser.Targets{target})
     if err != nil {
         t.Fatal("Failed to collect files:", err)
     }
