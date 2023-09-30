@@ -2,7 +2,10 @@ module github.com/Elementary1092/pm
 
 go 1.19
 
-require github.com/go-playground/validator/v10 v10.15.4
+require (
+	github.com/go-playground/validator/v10 v10.15.4
+	go.uber.org/goleak v1.2.1
+)
 
 require (
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
