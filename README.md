@@ -1,8 +1,8 @@
 <h1>Simple package manager</h1>
 
 # Description
-This package manager (pm) can achieve files, upload archieve to the server using SSH.
-Further, it can download archieves from the server and extract files from the archieve.
+This package manager (pm) can achieve files, upload archive to the server using SSH.
+Further, it can download archives from the server and extract files from the archive.
 
 Sample package declaration file:
 
