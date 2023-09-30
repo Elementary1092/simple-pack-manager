@@ -55,14 +55,17 @@ func Archive(root string, archieveName string, fileNames []string) (string, erro
 			return "", ErrInvalidFileName
 		}
 
-		path := filepath.Join(root, fileName)
-		f, err := os.Open(path)
+		f, err := os.Open(fileName)
 		if err != nil {
 			return "", ErrFailedToOpenFile
 		}
 		defer f.Close()
 
-		compressed, err := zipWriter.Create(fileName)
+        pathInArchive, err := filepath.Rel(root, fileName)
+        if err != nil {
+            return "", ErrFailedToArchiveFile
+        }
+		compressed, err := zipWriter.Create(pathInArchive)
 		if err != nil {
 			return "", ErrFailedToCreateCompressedFile
 		}

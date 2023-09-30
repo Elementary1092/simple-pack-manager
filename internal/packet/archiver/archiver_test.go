@@ -52,11 +52,12 @@ func TestArchieve_CreateArchieve(t *testing.T) {
     tmp := t.TempDir()
     tmpFS := os.DirFS(tmp)
 
-    if err := os.WriteFile(filepath.Join(tmp, "file"), []byte("some text\n"), 0644); err != nil {
+    filePath := filepath.Join(tmp, "file")
+    if err := os.WriteFile(filePath, []byte("some text\n"), 0644); err != nil {
         t.Fatal("Failed on creating temporary file:", err)
     }
 
-    archivePath, err := Archive(tmp, "packet", []string{"file"})
+    archivePath, err := Archive(tmp, "packet", []string{filePath})
     if err != nil {
         t.Fatal("Failed during archivation:", err)
     }
@@ -75,11 +76,12 @@ func TestArchieve_CreateArchieveWithDir(t *testing.T) {
         t.Fatal("Failed to create name directory", err)
     }
 
-    if err := os.WriteFile(filepath.Join(dirPath, "file"), []byte("some text\n"), 0644); err != nil {
+    filePath := filepath.Join(dirPath, "file")
+    if err := os.WriteFile(filePath, []byte("some text\n"), 0644); err != nil {
         t.Fatal("Failed on creating temporary file:", err)
     }
 
-    archivePath, err := Archive(tmp, "packet", []string{filepath.Join("data", "file")})
+    archivePath, err := Archive(tmp, "packet", []string{filePath})
     if err != nil {
         t.Fatal("Failed during archivation:", err)
     }
@@ -128,7 +130,7 @@ func TestExtractFrom_ExtractFromAchive(t *testing.T) {
         t.Fatal("Failed to create archive:", err)
     }
     
-    archivePath, err := Archive(tmp, "archive", []string{filepath.Base(filePath)})
+    archivePath, err := Archive(tmp, "archive", []string{filePath})
     if err != nil {
         t.Fatal("Failed to create archive:", err)
     }
