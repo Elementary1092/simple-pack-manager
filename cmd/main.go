@@ -12,9 +12,9 @@ import (
 	updatecmd "github.com/Elementary1092/pm/cmd/update"
 )
 
-const helpPrompt = `pm create <filename> - create package from package declaration files
+const helpPrompt = `pm -create <filename> - create package from package declaration files
 
-pm update <filename> - update package from package description files`
+pm -update <filename> - update package from package description files`
 
 const succeededPrompt = `Operation is successful.`
 
