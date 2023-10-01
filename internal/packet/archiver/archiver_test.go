@@ -9,13 +9,13 @@ import (
 )
 
 func TestArchive_EmptyRoot(t *testing.T) {
-	if _, err := Archive("", "archive", []string{"file"}); !errors.Is(err, ErrInvalidRootPath) {
+	if _, err := Archive("", "archive.zip", []string{"file"}); !errors.Is(err, ErrInvalidRootPath) {
 		t.Fail()
 	}
 }
 
 func TestArchive_SpacedRoot(t *testing.T) {
-	if _, err := Archive("   ", "archive", []string{"file"}); !errors.Is(err, ErrInvalidRootPath) {
+	if _, err := Archive("   ", "archive.zip", []string{"file"}); !errors.Is(err, ErrInvalidRootPath) {
 		t.Fail()
 	}
 }
@@ -35,7 +35,7 @@ func TestArchive_SpacedArchiveName(t *testing.T) {
 func TestArchive_EmptyFileName(t *testing.T) {
     tmp := t.TempDir()
     
-    if _, err := Archive(tmp, "archive", []string{""}); !errors.Is(err, ErrInvalidFileName) {
+    if _, err := Archive(tmp, filepath.Join(tmp, "archive.zip"), []string{""}); !errors.Is(err, ErrInvalidFileName) {
         t.Fail()
     }
 }
@@ -43,7 +43,7 @@ func TestArchive_EmptyFileName(t *testing.T) {
 func TestArchieve_SpacedFileName(t *testing.T) {
     tmp := t.TempDir()
 
-    if _, err := Archive(tmp, "archieve", []string{"   "}); !errors.Is(err, ErrInvalidFileName) {
+    if _, err := Archive(tmp, filepath.Join(tmp, "archive.zip"), []string{"   "}); !errors.Is(err, ErrInvalidFileName) {
         t.Fail()
     }
 }
@@ -57,7 +57,7 @@ func TestArchieve_CreateArchieve(t *testing.T) {
         t.Fatal("Failed on creating temporary file:", err)
     }
 
-    archivePath, err := Archive(tmp, filepath.Join(tmp, "packet"), []string{filePath})
+    archivePath, err := Archive(tmp, filepath.Join(tmp, "packet.zip"), []string{filePath})
     if err != nil {
         t.Fatal("Failed during archivation:", err)
     }
@@ -81,7 +81,7 @@ func TestArchieve_CreateArchieveWithDir(t *testing.T) {
         t.Fatal("Failed on creating temporary file:", err)
     }
 
-    archivePath, err := Archive(tmp, filepath.Join(tmp, "packet"), []string{filePath})
+    archivePath, err := Archive(tmp, filepath.Join(tmp, "packet.zip"), []string{filePath})
     if err != nil {
         t.Fatal("Failed during archivation:", err)
     }
@@ -92,13 +92,13 @@ func TestArchieve_CreateArchieveWithDir(t *testing.T) {
 }
 
 func TestExtractFrom_EmptyArchiveName(t *testing.T) {
-	if err := ExtractFrom("", "archive"); !errors.Is(err, ErrInvalidArchiveName) {
+	if err := ExtractFrom("", "archive.zip"); !errors.Is(err, ErrInvalidArchiveName) {
 		t.Fail()
 	}
 }
 
 func TestExtractFrom_SpacedArchiveName(t *testing.T) {
-	if err := ExtractFrom("   ", "archive"); !errors.Is(err, ErrInvalidArchiveName) {
+	if err := ExtractFrom("   ", "archive.zip"); !errors.Is(err, ErrInvalidArchiveName) {
 		t.Fail()
 	}
 }
@@ -130,10 +130,11 @@ func TestExtractFrom_ExtractFromAchive(t *testing.T) {
         t.Fatal("Failed to create archive:", err)
     }
     
-    archivePath, err := Archive(tmp, filepath.Join(tmp, "archive"), []string{filePath})
+    archivePath, err := Archive(tmp, filepath.Join(tmp, "archive.zip"), []string{filePath})
     if err != nil {
         t.Fatal("Failed to create archive:", err)
     }
+    os.Remove(filePath)
 
     err = ExtractFrom(archivePath, extractPath)
     if err != nil {

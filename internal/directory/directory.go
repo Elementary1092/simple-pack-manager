@@ -33,7 +33,7 @@ func MakeArchivePathName(at string, packet string, version string) string {
 }
 
 func MakeRemoteArchiveName(packet string, version string, archiveName string) string {
-	return filepath.Join(".", packet, version, archiveName)
+	return filepath.Join(".", packet, version, archiveName+".zip")
 }
 
 func MakeLatestArchiveLink(packet string) string {

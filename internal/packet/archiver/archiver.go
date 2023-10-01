@@ -38,8 +38,6 @@ func Archive(root string, archieveName string, fileNames []string) (string, erro
 		return "", ErrInvalidArchiveName
 	}
 
-	archieveName += ".zip"
-
     if err := os.MkdirAll(filepath.Dir(archieveName), 0777); err != nil {
         return "", ErrFailedToCreateArchieve
     }
@@ -102,12 +100,8 @@ func ExtractFrom(archiveFullName string, extractToPath string) error {
 	defer zipReader.Close()
 
 	for _, f := range zipReader.File {
-		fileName := strings.TrimSpace(strings.TrimLeft(f.Name, "./\\"))
-		if fileName == "" {
-			return ErrInvalidFileName
-		}
 		// assuming that filepaths from a zip file are correct
-		filePath := filepath.Join(extractToPath, fileName)
+		filePath := filepath.Join(extractToPath, f.Name)
 		if f.FileInfo().IsDir() {
 			if err := os.MkdirAll(filePath, os.ModePerm); err != nil {
 				return ErrFailedToCreateDirectory
