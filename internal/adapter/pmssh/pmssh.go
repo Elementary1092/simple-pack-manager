@@ -68,7 +68,7 @@ func verifyConnData() error {
 		return ErrInvalidPort
 	}
 
-	if err := validate.Validator().Var(sshUser, "min=1,alphanum"); err != nil {
+	if err := validate.Validator().Var(sshUser, "min=1,printascii"); err != nil {
 		return ErrInvalidUser
 	}
 

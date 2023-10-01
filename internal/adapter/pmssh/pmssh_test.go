@@ -140,7 +140,7 @@ func TestVerifyConnData_InvalidPort(t *testing.T) {
 func TestVerifyConnData_InvalidUserIllegalCharacter(t *testing.T) {
 	sshHost = "127.0.0.1"
 	sshPort = "22"
-	sshUser = "user\n"
+	sshUser = "user\xff"
 	sshPass = "password"
 	key = nil
 
