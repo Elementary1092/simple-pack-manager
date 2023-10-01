@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 
@@ -33,11 +34,13 @@ func NewCreateCommand(data io.Reader) *createCommand {
 }
 
 func (cr *createCommand) Execute(ctx context.Context) error {
+    fmt.Println("Parsing packet description.")
 	description, err := parser.ParsePacket(cr.data)
 	if err != nil {
 		return err
 	}
 
+    fmt.Println("Collecting local files.")
 	base, filenames, err := files.CollectLocalFileNames(description.Targets)
 	if err != nil {
 		return err
@@ -46,6 +49,7 @@ func (cr *createCommand) Execute(ctx context.Context) error {
     tempPath := directory.MakeTempDirectoryPath()
 	defer directory.RemoveDirectory(tempPath)
 
+    fmt.Println("Creating archive.")
 	archiveName := directory.MakeArchivePathName(tempPath, description.Name, description.Version)
 	archiveName, err = archiver.Archive(base, archiveName, filenames)
 	if err != nil {
@@ -64,6 +68,7 @@ func (cr *createCommand) Execute(ctx context.Context) error {
 	}
 	defer pmssh.Close(ctx)
 
+    fmt.Println("Uploading files...")
 	remoteArchive := directory.MakeRemoteArchiveName(description.Name, description.Version, description.Name)
 	if err := pmssh.Upload(ctx, remoteArchive, archiveName); err != nil {
 		return err

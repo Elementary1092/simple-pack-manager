@@ -37,6 +37,7 @@ func NewUpdateCommand(data io.Reader, name string) *updateCommand {
 
 // Execute assumes that all dependencies are listed in a file
 func (up *updateCommand) Execute(ctx context.Context) error {
+    fmt.Println("Parsing package description.")
     description, err := parser.ParsePackage(up.data)
     if err != nil {
         return err
@@ -90,6 +91,7 @@ func (up *updateCommand) Execute(ctx context.Context) error {
             return err
         }
 
+        fmt.Println("Extracting package", pack.Name)
         err = archiver.ExtractFrom(archNamePath, filepath.Join(packDestination, pack.Name))
         if err != nil {
             return err
