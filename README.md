@@ -12,7 +12,7 @@ Sample package declaration file:
  "name": "packet-1",
  "ver": "1.10",
  "targets": [
-  "./archive_this1/*.txt",
+  {"path": "./archive_this1/*.txt"},
   {"path": "./archive_this2/*", "exclude": "*.tmp"},
  ],
  packets: {
@@ -35,6 +35,22 @@ Sample package description file:
 ```
 
 # Usage
-pm create ./packet.json - upload package to the server
+pm -create ./packet.json - upload package to the server
 
-pm update ./packages.json - dowload package from the server
+pm -update ./packages.json - dowload package from the server
+
+# Build
+Prerequisites:
+- Go 1.16+
+- Create ./internal/adapter/pmssh/ssh-ip.conf file 
+    and write there IP-address of the server or use compile time value insertion
+- Create ./internal/adapter/pmssh/ssh-port.conf file 
+    and write there IP-address of the server or use compile time value insertion
+- Create ./internal/adapter/pmssh/ssh-user.conf file 
+    and write there IP-address of the server or use compile time value insertion
+- Create ./internal/adapter/pmssh/ssh-pass.conf file 
+    and write there IP-address of the server or use compile time value insertion.
+    If you want to connect to the server using private key, create file ssh-key.pem
+    file in ./internal/adapter/pmssh/ directory and paste private key there (or use compile time value insertion).
+
+Note: compile time value insertion is done via -ldflags="-X <module_name>.<variable_name>=Your_value".
