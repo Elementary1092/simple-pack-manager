@@ -22,6 +22,7 @@ Sample package declaration file:
 ```
 Note: files will be collected only from listed directories.
 This version does not collect files from subdirectories of a directory.
+To include all files in a directory end pattern with "/*".
 
 Sample package description file:
 
