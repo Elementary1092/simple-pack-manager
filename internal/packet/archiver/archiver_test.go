@@ -57,7 +57,7 @@ func TestArchieve_CreateArchieve(t *testing.T) {
         t.Fatal("Failed on creating temporary file:", err)
     }
 
-    archivePath, err := Archive(tmp, "packet", []string{filePath})
+    archivePath, err := Archive(tmp, filepath.Join(tmp, "packet"), []string{filePath})
     if err != nil {
         t.Fatal("Failed during archivation:", err)
     }
@@ -81,7 +81,7 @@ func TestArchieve_CreateArchieveWithDir(t *testing.T) {
         t.Fatal("Failed on creating temporary file:", err)
     }
 
-    archivePath, err := Archive(tmp, "packet", []string{filePath})
+    archivePath, err := Archive(tmp, filepath.Join(tmp, "packet"), []string{filePath})
     if err != nil {
         t.Fatal("Failed during archivation:", err)
     }
@@ -130,7 +130,7 @@ func TestExtractFrom_ExtractFromAchive(t *testing.T) {
         t.Fatal("Failed to create archive:", err)
     }
     
-    archivePath, err := Archive(tmp, "archive", []string{filePath})
+    archivePath, err := Archive(tmp, filepath.Join(tmp, "archive"), []string{filePath})
     if err != nil {
         t.Fatal("Failed to create archive:", err)
     }

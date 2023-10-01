@@ -39,8 +39,12 @@ func Archive(root string, archieveName string, fileNames []string) (string, erro
 	}
 
 	archieveName += ".zip"
-	archievePath := filepath.Join(root, archieveName)
-	archive, err := os.Create(archievePath)
+
+    if err := os.MkdirAll(filepath.Dir(archieveName), 0777); err != nil {
+        return "", ErrFailedToCreateArchieve
+    }
+
+	archive, err := os.OpenFile(archieveName, os.O_TRUNC | os.O_CREATE | os.O_RDWR, os.ModePerm)
 	// could have wrapped err from os
 	if err != nil {
 		return "", ErrFailedToCreateArchieve
@@ -75,7 +79,7 @@ func Archive(root string, archieveName string, fileNames []string) (string, erro
 		}
 	}
 
-	return archievePath, nil
+	return archieveName, nil
 }
 
 // ExtractFrom opens archiveFullName file and writes its contents to the extractToPath

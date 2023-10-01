@@ -280,3 +280,45 @@ func doesFileExist(ctx context.Context, remoteFile string) bool {
 
 	return err != nil
 }
+
+func CreateSymbolicLink(ctx context.Context, linkPathName string, linkTo string) error {
+    connMutex.Lock()
+    defer connMutex.Unlock()
+
+    if conn == nil {
+        return ErrNotConnected
+    }
+
+    client := fsClient()
+    if client == nil {
+        return ErrNotConnected
+    }
+
+    if err := client.Symlink(linkTo, linkPathName); err != nil {
+        return ErrFailedToUploadFile
+    }
+
+    return nil
+}
+
+func ResolveLink(ctx context.Context, linkPathName string) (string, error) {
+    connMutex.Lock()
+    defer connMutex.Unlock()
+
+    if conn == nil {
+        return "", ErrNotConnected
+    }
+
+    client := fsClient()
+    if client == nil {
+        return "", ErrNotConnected
+    }
+
+    path, err := client.ReadLink(linkPathName)
+    if err != nil {
+        return "", ErrFailedToDownloadFile
+    }
+
+    return path, nil
+}
+
