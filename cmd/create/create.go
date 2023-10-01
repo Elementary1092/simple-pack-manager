@@ -6,7 +6,6 @@ import (
 	"errors"
 	"io"
 	"os"
-	"path/filepath"
 
 	"github.com/Elementary1092/pm/internal/adapter/pmssh"
 	"github.com/Elementary1092/pm/internal/directory"
@@ -65,7 +64,7 @@ func (cr *createCommand) Execute(ctx context.Context) error {
 	}
 	defer pmssh.Close(ctx)
 
-	remoteArchive := directory.MakeRemoteArchiveName(description.Name, description.Version, filepath.Base(archiveName))
+	remoteArchive := directory.MakeRemoteArchiveName(description.Name, description.Version, description.Name)
 	if err := pmssh.Upload(ctx, remoteArchive, archiveName); err != nil {
 		return err
 	}
