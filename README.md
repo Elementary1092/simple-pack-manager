@@ -13,10 +13,10 @@ Sample package declaration file:
  "ver": "1.10",
  "targets": [
   {"path": "./archive_this1/*.txt"},
-  {"path": "./archive_this2/*", "exclude": "*.tmp"},
+  {"path": "./archive_this2/*", "exclude": "*.tmp"}
  ],
  packets: {
-  {"name": "packet-3", "ver": "<=2.0" },
+  {"name": "packet-3", "ver": "<=2.0" }
  }
 }
 ```
@@ -32,7 +32,7 @@ Sample package description file:
  "packages": [
   {"name": "packet-1", "ver": ">=1.10"},
   {"name": "packet-2" },
-  {"name": "packet-3", "ver": "<=1.10" },
+  {"name": "packet-3", "ver": "<=1.10" }
  ]
 }
 ```
