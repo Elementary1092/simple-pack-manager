@@ -22,7 +22,7 @@ var (
     ErrInvalidVersionFormat = errors.New("invalid version format")
 )
 
-func GetVersionType(v string) versionType {
+func Type(v string) versionType {
     if strings.HasPrefix(v, "<=") {
         return LessOrEqual
     }
