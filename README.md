@@ -20,6 +20,8 @@ Sample package declaration file:
  }
 }
 ```
+Note: files will be collected only from listed directories.
+This version does not collect files from subdirectories of a directory.
 
 Sample package description file:
 
@@ -33,6 +35,8 @@ Sample package description file:
  ]
 }
 ```
+Note: package manager assumes that package description file contains all needed dependencies.
+It means that only listed files will be downloaded.
 
 # Usage
 pm -create ./packet.json - upload package to the server
