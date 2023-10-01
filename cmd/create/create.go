@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/Elementary1092/pm/internal/adapter/pmssh"
+	"github.com/Elementary1092/pm/internal/directory"
 	"github.com/Elementary1092/pm/internal/packet/archiver"
 	"github.com/Elementary1092/pm/internal/packet/files"
 	"github.com/Elementary1092/pm/internal/packet/parser"
@@ -43,17 +44,17 @@ func (cr *createCommand) Execute(ctx context.Context) error {
 		return err
 	}
 
-	makeTempDir()
-	defer removeTempDir()
+    tempPath := directory.MakeTempDirectoryPath()
+	defer directory.RemoveDirectory(tempPath)
 
-	archiveName := makeArchivePathName(description.Name, description.Version)
+	archiveName := directory.MakeArchivePathName(tempPath, description.Name, description.Version)
 	archiveName, err = archiver.Archive(base, archiveName, filenames)
 	if err != nil {
 		return err
 	}
 	defer os.Remove(archiveName)
 
-	metaFilePath := makeMetadataPathName(description.Name, description.Version)
+	metaFilePath := directory.MakeMetadataPathName(tempPath, description.Name, description.Version)
 	if err := makeMetadataFile(metaFilePath, description.Packets); err != nil {
 		return ErrInternalError
 	}
@@ -64,46 +65,27 @@ func (cr *createCommand) Execute(ctx context.Context) error {
 	}
 	defer pmssh.Close(ctx)
 
-	remoteArchive := makeRemoteArchiveName(description.Name, description.Version, filepath.Base(archiveName))
+	remoteArchive := directory.MakeRemoteArchiveName(description.Name, description.Version, filepath.Base(archiveName))
 	if err := pmssh.Upload(ctx, remoteArchive, archiveName); err != nil {
 		return err
 	}
 
-	linkName := makeLatestArchiveLink(description.Name)
+	linkName := directory.MakeLatestArchiveLink(description.Name)
 	if err := pmssh.CreateSymbolicLink(ctx, linkName, archiveName); err != nil {
 		return err
 	}
 
-	remoteMetadata := makeRemoteMetadataName(description.Name, description.Version)
+	remoteMetadata := directory.MakeRemoteMetadataName(description.Name, description.Version)
 	if err := pmssh.Upload(ctx, remoteMetadata, metaFilePath); err != nil {
 		return err
 	}
 
-	metaLinkName := makeLatestMetadataLink(description.Name)
+	metaLinkName := directory.MakeLatestMetadataLink(description.Name)
 	if err := pmssh.CreateSymbolicLink(ctx, metaLinkName, metaFilePath); err != nil {
 		return err
 	}
 
 	return nil
-}
-
-var tempDir string
-
-func makeTempDir() {
-	wd, err := os.Getwd()
-	if err != nil {
-		tempDir = filepath.Join(".", "tmp")
-		return
-	}
-	tempDir, err = os.MkdirTemp(wd, "tmp")
-	if err != nil {
-		tempDir = filepath.Join(".", "tmp")
-		return
-	}
-}
-
-func removeTempDir() {
-	os.RemoveAll(tempDir)
 }
 
 func makeMetadataFile(filePath string, data any) error {
@@ -116,26 +98,3 @@ func makeMetadataFile(filePath string, data any) error {
 	return encoder.Encode(data)
 }
 
-func makeArchivePathName(packet string, version string) string {
-	return filepath.Join(tempDir, packet, version, packet)
-}
-
-func makeRemoteArchiveName(packet string, version string, archiveName string) string {
-	return filepath.Join(".", packet, version, archiveName)
-}
-
-func makeLatestArchiveLink(packet string) string {
-	return filepath.Join(".", packet, "latest")
-}
-
-func makeMetadataPathName(packet string, version string) string {
-	return filepath.Join(tempDir, packet, version, "meta")
-}
-
-func makeRemoteMetadataName(packet string, version string) string {
-	return filepath.Join(".", "meta", packet, version, "meta")
-}
-
-func makeLatestMetadataLink(packet string) string {
-	return filepath.Join(".", "meta", packet, "latest")
-}
