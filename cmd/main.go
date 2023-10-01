@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"path/filepath"
+	"strings"
 
 	createcmd "github.com/Elementary1092/pm/cmd/create"
 	updatecmd "github.com/Elementary1092/pm/cmd/update"
@@ -63,7 +65,14 @@ func main() {
         }
         
         file = f
-        command = updatecmd.NewUpdateCommand(f)
+
+        var nameWithoutExtension string = "packet"
+        candidate := strings.TrimLeft(filepath.Base(s), ".") 
+        fstDot := strings.Index(candidate, ".")
+        if fstDot != -1 && len(candidate[:fstDot]) != 0 {
+            nameWithoutExtension = candidate[:fstDot]
+        }
+        command = updatecmd.NewUpdateCommand(f, nameWithoutExtension)
 
         return nil
     })
