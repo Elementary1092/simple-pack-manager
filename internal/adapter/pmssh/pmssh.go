@@ -4,7 +4,6 @@ import (
 	"context"
 	_ "embed"
 	"errors"
-	"fmt"
 	"net"
 	"os"
 	"path/filepath"
@@ -128,7 +127,6 @@ func createConnection(ctx context.Context) error {
 
 	sshConn, err := ssh.Dial("tcp", address, &cfg)
 	if err != nil {
-		fmt.Println("Failed to connect:", err)
 		return ErrConnectionFailure
 	}
 
@@ -226,7 +224,7 @@ func Download(ctx context.Context, srcFullName string, dstFullName string) error
 }
 
 func download(ctx context.Context, srcFullName string, dstFullName string) error {
-	dst, err := os.Open(dstFullName)
+	dst, err := os.OpenFile(dstFullName, os.O_CREATE | os.O_RDWR | os.O_TRUNC, os.ModePerm)
 	if err != nil {
 		return ErrFailedToOpenDestination
 	}
@@ -294,6 +292,8 @@ func CreateSymbolicLink(ctx context.Context, linkPathName string, linkTo string)
         return ErrNotConnected
     }
 
+    // Should have checked error
+    client.Remove(linkPathName)
     if err := client.Symlink(linkTo, linkPathName); err != nil {
         return ErrFailedToUploadFile
     }
