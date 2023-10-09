@@ -50,11 +50,11 @@ Prerequisites:
 - Create ./internal/adapter/pmssh/ssh-ip.conf file 
     and write there IP-address of the server or use compile time value insertion
 - Create ./internal/adapter/pmssh/ssh-port.conf file 
-    and write there IP-address of the server or use compile time value insertion
+    and write there port on which ssh server operates or use compile time value insertion
 - Create ./internal/adapter/pmssh/ssh-user.conf file 
-    and write there IP-address of the server or use compile time value insertion
+    and write there username or use compile time value insertion
 - Create ./internal/adapter/pmssh/ssh-pass.conf file 
-    and write there IP-address of the server or use compile time value insertion.
+    and write there password to login or use compile time value insertion.
     If you want to connect to the server using private key, create file ssh-key.pem
     file in ./internal/adapter/pmssh/ directory and paste private key there (or use compile time value insertion).
 
